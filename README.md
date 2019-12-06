@@ -10,7 +10,7 @@ $ npm install postcss-rem-to-pixel --save-dev
 
 ## Usage
 
-Sometimes you need to include a third-party css file that uses rems.  Great pracitice!  Unless you can't afford to change your body font-size just for some vendor.  This script converts every rem value to a px value from the properties you choose using a default font size of 16px.
+Sometimes you need to include a third-party css file that uses rems.  Great pracitice!  Unless you can't afford to change your body font-size just for some vendor.  This script converts every rem value to a px value from the properties you choose using a default font size of 8px.
 
 
 ### Input/Output
@@ -61,9 +61,9 @@ Type: `Object | Null`
 Default:
 ```js
 {
-    rootValue: 16,
+    rootValue: 8,
     unitPrecision: 5,
-    propList: ['font', 'font-size', 'line-height', 'letter-spacing'],
+    propList: ['*'],
     selectorBlackList: [],
     replace: true,
     mediaQuery: false,
