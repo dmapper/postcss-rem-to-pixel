@@ -6,10 +6,10 @@ var remRegex = require('./lib/rem-unit-regex');
 var filterPropList = require('./lib/filter-prop-list');
 
 var defaults = {
-    rootValue: 16,
+    rootValue: 8,
     unitPrecision: 5,
     selectorBlackList: [],
-    propList: ['font', 'font-size', 'line-height', 'letter-spacing'],
+    propList: ['*'],
     replace: true,
     mediaQuery: false,
     minRemValue: 0
