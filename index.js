@@ -2,7 +2,7 @@
 
 var postcss = require('postcss');
 var objectAssign = require('object-assign');
-var remRegex = require('./lib/rem-unit-regex');
+var unitRegex = require('./lib/rem-unit-regex');
 var filterPropList = require('./lib/filter-prop-list');
 
 var defaults = {
@@ -12,13 +12,13 @@ var defaults = {
     propList: ['*'],
     replace: true,
     mediaQuery: false,
-    minRemValue: 0
+    minUnitValue: 0
 };
 
 module.exports = postcss.plugin('postcss-rem-to-pixel', function (options) {
 
     var opts = objectAssign({}, defaults, options);
-    var remReplace = createRemReplace(opts.rootValue, opts.unitPrecision, opts.minRemValue);
+    var unitReplace = createUnitReplace(opts.rootValue, opts.unitPrecision, opts.minUnitValue);
 
     var satisfyPropList = createPropListMatcher(opts.propList);
 
@@ -26,13 +26,13 @@ module.exports = postcss.plugin('postcss-rem-to-pixel', function (options) {
 
         css.walkDecls(function (decl, i) {
             // This should be the fastest test and will remove most declarations
-            if (decl.value.indexOf('rem') === -1) return;
+            if (decl.value.indexOf('u') === -1) return;
 
             if (!satisfyPropList(decl.prop)) return;
 
             if (blacklistedSelector(opts.selectorBlackList, decl.parent.selector)) return;
 
-            var value = decl.value.replace(remRegex, remReplace);
+            var value = decl.value.replace(unitRegex, unitReplace);
 
             // if px unit already exists, do not add or replace
             if (declarationExists(decl.parent, decl.prop, value)) return;
@@ -46,20 +46,20 @@ module.exports = postcss.plugin('postcss-rem-to-pixel', function (options) {
 
         if (opts.mediaQuery) {
             css.walkAtRules('media', function (rule) {
-                if (rule.params.indexOf('rem') === -1) return;
-                rule.params = rule.params.replace(remRegex, remReplace);
+                if (rule.params.indexOf('u') === -1) return;
+                rule.params = rule.params.replace(unitRegex, unitReplace);
             });
         }
 
     };
 });
 
-function createRemReplace (rootValue, unitPrecision, minRemValue) {
+function createUnitReplace (rootValue, unitPrecision, minUnitValue) {
     return function (m, $1) {
         if (!$1) return m;
-        var rems = parseFloat($1);
-        if (rems < minRemValue) return m;
-        var fixedVal = toFixed((rems * rootValue), unitPrecision);
+        var units = parseFloat($1);
+        if (units < minUnitValue) return m;
+        var fixedVal = toFixed((units * rootValue), unitPrecision);
         return (fixedVal === 0) ? '0' : fixedVal + 'px';
     };
 }
