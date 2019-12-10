@@ -1,7 +1,7 @@
 {
   "name": "@startupjs/postcss-rem-to-pixel",
   "description": "Convert rem (root em) units to px units using PostCSS. Based on postcss-pxtorem.",
-  "version": "4.1.2",
+  "version": "1004.1.2",
   "publishConfig": {
     "access": "public"
   },
